@@ -9,21 +9,19 @@
 // Par : Frédérik Taleb
 // Modification : 2022/11/24
 // Par : Frédérik Taleb
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LaboFinal_A22
+namespace ConsoleApp_LabA22
 {
     public class Modele
     {
         // attributs
         // une liste ou un tableau d'habiletes, le type est donc la classe Habilete
-        string[] habilietes = new string[];
+        List<Habilete> habiletes;
 
         // Consturcteur
         // 
@@ -72,21 +70,36 @@ namespace LaboFinal_A22
         public Joueur genererJoueur(string fichier, string nom)
         {
             // Déclarer une variable de type Joueur, nous allons créer l'instance plus tard
-          
+            Joueur generer;
+
             // Initialiser la classe pour lire le fichier
+            string joueurDoc = fichier + ".txt";
+            StreamReader lecteur = new StreamReader(joueurDoc);
+            lecteur.ReadLine();
 
             // Lire la première ligne dans le vide ( on a besoin seulement des stats)
-
+            string stats = lecteur.ReadLine();
             // Lire la deuxième ligne et la garder en mémoire
+            string line = lecteur.ReadLine();
 
             // Transformer la ligne en tableau de string, en utilisant la virgule comme séparateur
-
+            string[] statsTab = stats.Split(',');
             // utiliser le tableau afin d'obtenir les informations désirées pour utiliser le constructeur de la classe Joueur
             // et finir de créer l'instance du joueur avec ces informations
+            string file = nom;
+            int.TryParse(statsTab[1], out int att);
+            int.TryParse(statsTab[2], out int matt);
+            int.TryParse(statsTab[3], out int def);
+            int.TryParse(statsTab[4], out int mdef);
+            int.TryParse(statsTab[5], out int hp);
+            int.TryParse(statsTab[6], out int id);
+
+            generer = new Joueur(nom, att, matt, def, mdef, hp);
 
             // ne pas oublier d'assigner l'habilete au joueur selon le id après la construction
-
+            generer.habilete = this.habiletes[id];
             // retourner le joueur configuré
+            return generer;
 
         }
 
@@ -99,22 +112,38 @@ namespace LaboFinal_A22
         //
         // @param string fichier le nom de l'ennemi choisi, il faudra ajouter .txt à la fin du string
         // @return une instance de la classe ennemi
+
         public Ennemi genererEnnemi(string fichier)
         {
             // Déclarer une variable de type Ennemi, nous allons créer l'instance plus tard
+            Ennemi generer;
 
             // Initialiser la classe pour lire le fichier
+            string ennemiDoc = fichier + ".txt";
+            StreamReader lecteur = new StreamReader(ennemiDoc);
+            lecteur.ReadLine();
 
             // Lire la première ligne dans le vide ( on a besoin seulement des stats)
-
+            string stats = lecteur.ReadLine();
             // Lire la deuxième ligne et la garder en mémoire
-
+            string line = lecteur.ReadLine();
             // Transformer la ligne en tableau de string, en utilisant la virgule comme séparateur
-
+            string[] statsTab = stats.Split(',');
             // utiliser le tableau afin d'obtenir les informations désirées pour utiliser le constructeur de la classe Joueur
             // et finir de créer l'instance du joueur avec ces informations
+            string nom = "";
+            string file = statsTab[0];
+            int.TryParse(statsTab[1], out int att);
+            int.TryParse(statsTab[2], out int matt);
+            int.TryParse(statsTab[3], out int def);
+            int.TryParse(statsTab[4], out int mdef);
+            int.TryParse(statsTab[5], out int hp);
+            bool.TryParse(statsTab[6], out bool magique);
+
+            generer = new Ennemi(nom,att, matt, def, mdef, hp, magique);
 
             // retourner le joueur configuré
+            return generer;
 
         }
     }

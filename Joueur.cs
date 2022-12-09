@@ -13,9 +13,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LaboFinal_A22
+namespace ConsoleApp_LabA22
 {
-    public class Joueur
+   public class Joueur
     {
         // attributs (public)
         // un nom 
@@ -27,7 +27,6 @@ namespace LaboFinal_A22
         public int def;
         public int mdef;
         public int hp;
-        bool magique = false;
         public Habilete habilete;
 
 
@@ -35,7 +34,7 @@ namespace LaboFinal_A22
         //
         // reçoit tous les attributs en paramètre sauf l'habilete
         // assigne les paramètres aux attributs correspondants
-        public Joueur(string nom, int att, int matt, int def, int mdef, int hp, bool magique)
+        public Joueur(string nom, int att, int matt, int def, int mdef, int hp)
         {
             this.nom = nom;
             this.att = att;
@@ -43,7 +42,7 @@ namespace LaboFinal_A22
             this.def = def;
             this.mdef = mdef;
             this.hp = hp;
-            this.magique = magique;
+            
         }
 
 
@@ -97,11 +96,11 @@ namespace LaboFinal_A22
             else
             {
                 // les dommages finaux sont le dommage - la défense
-                dmg -= -this.def;
+                dmg -= this.def;
             }
 
             // si les dommages finaux sont plus grands que 0
-            if (dmg­>0)
+            if (dmg­ > 0)
             {
                 // diminuer les points de vie du nombre de points de dommage final
                 this.hp -= dmg;
@@ -117,11 +116,14 @@ namespace LaboFinal_A22
             // détermine s'il reste des points de vie
             // 
             // @return bool vrai s'il reste des points de vie, faux sinon
-            if (this.hp <= 0)
+            if (this.hp > 0)
+            {
+                return estVivant;
+            }
+            else
             {
                 return false;
             }
-            return estVivant;
         }
 
 

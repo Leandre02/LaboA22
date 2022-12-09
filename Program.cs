@@ -1,4 +1,4 @@
-﻿namespace LaboFinal_A22
+﻿namespace ConsoleApp_LabA22
 {
     internal class Program
     {

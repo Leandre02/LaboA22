@@ -20,14 +20,13 @@
 // Par : Frédérik Taleb
 // Modification : 2022/11/24
 // Par : Frédérik Taleb
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LaboFinal_A22
+namespace ConsoleApp_LabA22
 {
     public class Controleur
     {
@@ -44,7 +43,7 @@ namespace LaboFinal_A22
             this.etat = 0;
             this.ui = new InterfaceUtilisateur();
             this.usine = new Modele();
-            this.classes = new string[3] { "guerrier", "roublard", "magicien"};
+            this.classes = new string[3] { "guerrier", "roublard", "magicien" };
             this.ennemis = new Ennemi[tabNomEnnemis.Length];
             for (int i = 0; i < tabNomEnnemis.Length; i++)
             {
@@ -114,7 +113,7 @@ namespace LaboFinal_A22
             {
                 this.etat = 4;
             }
-            else 
+            else
             {
                 this.encounter += 1;
             }
@@ -127,7 +126,7 @@ namespace LaboFinal_A22
         public void combat()
         {
             Random rng = new Random();
-            Ennemi[] combatants = new Ennemi[rng.Next(1,4)];
+            Ennemi[] combatants = new Ennemi[rng.Next(1, 4)];
             for (int i = 0; i < combatants.Length; i++)
             {
                 int combatant = rng.Next(this.ennemis.Length);

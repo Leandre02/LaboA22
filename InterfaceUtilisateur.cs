@@ -17,15 +17,13 @@
 // Par : Frédérik Taleb
 // Modification : 2022/11/24
 // Par : Frédérik Taleb
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LaboFinal_A22
+namespace ConsoleApp_LabA22
 {
     public class InterfaceUtilisateur
     {
@@ -39,7 +37,7 @@ namespace LaboFinal_A22
         public int largeur;
         public int hauteur;
         public string[] arene;
-        
+
         // Constructeur
         // Initialise les attributs
         public InterfaceUtilisateur()
@@ -75,55 +73,79 @@ namespace LaboFinal_A22
         public void chargerCarte()
         {
             // initialiser la liste des cases de la carte
-            this.carte = new List<string>(); 
+            this.carte = new List<string>();
 
             // initialiser un lecteur de fichier texte pour lire le fichier carte.txt
             StreamReader lecteur = new StreamReader("carte.txt");
 
             // lire la première ligne de la carte. NE PAS METTRE CETTE LIGNE DANS LA LISTE
-
+            string maps = lecteur.ReadLine();
             // initialiser la largeur de la carte en prenant la longueur de la première ligne
             // les string sont des tableau, on a accès à la propriété .Lenght
-
+            this.largeur = maps.Length;
             // au moyen d'une boucle while remplir la liste de la carte avec chacun des symboles du fichier texte
             while (!lecteur.EndOfStream)
             {
                 // lire une ligne et la placer dans une variable temporairement
-
+                string test;
+                test = lecteur.ReadLine();
                 // pour chaque lettre de la ligne
-
+                for (int i = 0; i < largeur; i++)
+                {
                     // ajouter le caractère au tableau
+                    string hub = char.ToString(test[i]);
+                    this.carte.Add(hub);
+                }
 
             }
             // fermer le lecteur pour libérer le fichier 
-            lecteur.close();
+            lecteur.Close();
             // Une fois le tableau de la carte rempli, initialiser la hauteur de la carte
             // la hauteur est le nombre d'éléments de la liste / la largeur de la carte
-            this.hauteur = largeur.Length;   
-            // placer le joueur à la position de départ, la première case libre en haut à gauche
+            this.hauteur = carte.Count / largeur;
 
+            // placer le joueur à la position de départ, la première case libre en haut à gauche
+            carte[largeur + 1] = "P";
         }
 
 
         // afficherMenuCreation
         public int afficherMenuCreation()
         {
-
-
             //
             // affiche le menu de création du joueur 
-        }
-        // retourne le choix de la classe : 0  pour guerrier, 1 pour magicien ou 2 pour roublard
-        return choix;
-        //
-        // @return int le nombre correspondant à la classe choisie
+            int choixuser = 0;
+            Console.WriteLine(menuCreation);
+            int.TryParse(Console.ReadLine(), out choixuser);
 
+            // retourne le choix de la classe : 0  pour guerrier, 1 pour magicien ou 2 pour roublard
+            choixuser--;
+            //
+            // @return int le nombre correspondant à la classe choisie
+            return choixuser;
+        }
 
         // demanderNom
         //
         // demande le nom du personnage à la console et retourne la réponse
         // 
         // @return string le nom choisi pour le personnage
+        public string demanderNom()
+        {
+
+            Console.WriteLine("Veuillez entrer le nom de votre personnage");
+            string nom = Console.ReadLine();
+            if (nom == "")
+            {
+                nom = "Newuser";
+                return nom;
+            }
+            else
+            {
+                return nom;
+            }
+
+        }
 
 
         // afficherCarte
@@ -132,13 +154,18 @@ namespace LaboFinal_A22
         public void afficherCarte()
         {
             // pour chaque unité de hauteur de la carte
-
+            for (int i = 0; i < hauteur; i++)
+            {
                 // pour chaque unité de largeur de la carte
-
+                for (int j = 0; j < largeur; j++)
+                {
                     // afficher sur la même ligne de console
                     // le symbole de la liste à la position : j + (i * largeur)
-
+                    Console.Write(carte[j + (i * largeur)]);
+                }
                 // sauter une ligne
+                Console.WriteLine();
+            }
         }
 
         // afficherMenuExploration
@@ -154,14 +181,30 @@ namespace LaboFinal_A22
         {
 
             // afficher les instructions
-
+            Console.WriteLine(this.instructions);
             // récupérer la réponse de l'utilisateur
-
+            string reponse = Console.ReadLine();
             // selon la réponse W (haut),S(bas),A(gauche) ou D(droite)
             // assigner 0,1,2 ou 3 à une variable pour le résultat
-
+            int assign = -1;
+            if (reponse == "W" || reponse == "w")
+            {
+                assign = 0;
+            }
+            else if (reponse == "S" || reponse == "s")
+            {
+                assign = 1;
+            }
+            else if (reponse == "A" || reponse == "a")
+            {
+                assign = 2;
+            }
+            else if (reponse == "D" || reponse == "d")
+            {
+                assign = 3;
+            }
             // retourner la variable contentant le résultat du choix
-
+            return assign;
         }
 
         // afficherArene
@@ -180,31 +223,45 @@ namespace LaboFinal_A22
         public void afficherArene(string[] ennemis)
         {
             // variable pour savoir quel ennemi on affiche, le premier est 0
-
             // pour chaque case du tableau this.arene (chaque ligne d'affichage)
-
+            for (int i = 0; i < this.arene.Length; i++)
+            {
                 // initialiser une variable string ligne
                 // et lui assigner la valeur de la ligne actuelle : i
-
+                string ligne = this.arene[i];
                 // si on est à la 3ème ligne
-
+                if (i == 2)
+                {
                     // remplacer le marqueur {0} par le nom du premier ennemi
+                    Console.WriteLine(ligne, ennemis[0]);
+
+                }
 
                 // sinon si on est à la 5 ème ligne 
-
+                else if (i == 5)
+                {
                     // remplacer le marqueur {0} par le nom du deuxième ennemi
-
+                    Console.WriteLine(ligne, ennemis[1]);
+                }
                 // sinon si on est à la 7 ème ligne
-
+                else if (i == 7)
+                {
                     // remplacer le marqueur {0} par le nom du troisième ennemi
-
+                    Console.WriteLine(ligne, ennemis[2]);
+                }
                 // sinon
-
+                else
+                {
                     // pour chaque case du string dans this.arene à la position actuelle (i)
-
+                    for (int j = 0; j < ligne.Length; j++)
+                    {
                         // afficher le symbole actuel : this.arene[i][j] , sans sauter de ligne
-
-                // sauter une ligne
+                        Console.WriteLine(j + " " + ligne[j]);
+                    }
+                    // sauter une ligne
+                    Console.WriteLine();
+                }
+            }
         }
 
         // afficherStats
@@ -212,11 +269,24 @@ namespace LaboFinal_A22
         // affiche les stats reçues en paramètre ligne par ligne
         //
         // @param string[] stats un tableau de string contenant les stats
+        public void afficherStats(string[] stats)
+        {
+            // pour chaque case du tableau stats
+            for (int i = 0; i < stats.Length; i++)
+            {
+                // afficher la ligne actuelle
+                Console.WriteLine(stats[i]);
+            }
+        }
 
 
         // afficherEntete
         //
         // affiche l'entête du jeu
+        public void afficherEntete()
+        {
+            Console.WriteLine(this.entete);
+        }
 
 
         // afficherMenuCombat
@@ -230,15 +300,19 @@ namespace LaboFinal_A22
         public int afficherMenuCombat(string[] actions)
         {
             // initialiser une variable pour le choix de l'action avec l'action 0
-
+            int ennemis = 0;
             // pour tous les éléments du tableau des actions
-
+            for (int i = 0; i < actions.Length; i++)
+            {
                 // afficher i + 1 suivi du nom de l'action
+                i = i + 1;
+                Console.WriteLine($"{actions[i]}");
+            }
 
             // lire la réponse de l'utilisateur
-
+            int.TryParse(Console.ReadLine(), out ennemis);
             // retourne la position de l'action dans le tableau reçu en paramètre
-
+            return ennemis;
         }
 
         // afficherMenuCible
@@ -253,8 +327,8 @@ namespace LaboFinal_A22
         {
             int choix = 0;
             for (int i = 0; i < ennemis.Length; i++)
-            { 
-                Console.WriteLine((i+1) + ". " + ennemis[i]);
+            {
+                Console.WriteLine((i + 1) + ". " + ennemis[i]);
             }
             int.TryParse(Console.ReadLine(), out choix);
 
@@ -264,30 +338,58 @@ namespace LaboFinal_A22
         // afficherMenuIntro
         //
         // affiche l'intro et le menu du début, ensuite retourne le choix de l'utilisateur : 1 pour jouer, 2 pour quitter
+        public int afficherMenuIntro()
+        {
+            int choixIntro = 0;
+            Console.WriteLine(intro);
+            Console.WriteLine(menuIntro);
+            int.TryParse(Console.ReadLine(), out choixIntro);
+
+            return choixIntro;
+        }
 
 
         // afficherMenuFin
         //
         // affiche le menu de fin et retourne le choix de l'utilisateur : 1 pour rejouer, 2 pour quitter
+        public int afficherMenuFin()
+        {
+            int choixFin = 0;
+            Console.WriteLine("Merci d'avoir Participé :)");
+            this.afficherMenuFin();
+            int.TryParse(Console.ReadLine(), out choixFin);
+
+            switch (choixFin)
+            {
+                case 1:
+                    return 1;
+                case 2:
+                    return 2;
+                default:
+                    return 0;
+            }
+        }
 
 
         // demanderPositionJoueur
         // 
-        // renvoie le # de la case dans this.carte où il y a un J
+        // renvoie le # de la case dans this.carte où il y a un J 
         // les x commencent à 0 et sont positifs vers la droite
         // les y commencent à 0 et sont positifs vers le bas
         //
         // @return int le numéro de la case où le joueur est
-        public int demanderPosition()
+        public int demanderPositionJoueur()
         {
             // initialiser une variable pour la position du joueur dans la liste this.carte
-
+            string positionJoueur = "#";
             // tant que le compteur position est plus petit que la longueur de la liste
             // et que le contenu de la carte à la position du compteur est différente de J
+            for (int i = 0; i < this.carte.Count && this.carte[i] != "J"; i++)
+            {
+                // renvoyer la position dujoueur
+                return i;
+            }
 
-                // augmenter le compteur position
-
-            // renvoyer la position dujoueur
 
         }
 
@@ -303,44 +405,66 @@ namespace LaboFinal_A22
         public bool deplacerJoueur(int direction)
         {
             // initialiser une variable pour dire si le joueur est arrivé à la sortie
-
+            bool estfini = false;
             // initialiser une variable (compteur) pour le numéro de la case où le joueur est placé
-
+            int compteur = 0;
             // initialiser une variable pour le numéro de la case de destination
-
+            int var = 0;
             // trouver la case dans laquelle le joueur est avec la méthode demanderPosition()
-
+           compteur = demanderPositionJoueur();
             // selon la direction
             // si le joueur va vers le haut
-
+            if (direction == 0)
+            {
                 // la case de destination est la case du joueur - la largeur de la carte
+                var = compteur - this.largeur;
+            }
 
             // vers le bas
-
+            else if (direction == 1)
+            {
                 // la case de destination est la case du joueur + la largeur de la carte
+                var = compteur + this.largeur;
+            }
 
             // vers la gauche
-
+            else if (direction == 2)
+            {
                 // la case de destination est la case du joueur - 1
+                var = compteur - 1;
+            }
 
             // vers la droite
-
+            else if (direction == 3)
+            {
                 // la case de destination est la case du joueur + 1
+                var = compteur + 1;
+            }
 
             // si la position de destination est dans la carte
             // >= 0 et < le nombre d'éléments de la carte
-
+            if (var >= 0 && var < this.carte.Count)
+            {
                 // si le contenu de la carte à la position de destination est la sortie (un S)
-
+                if (this.carte[var] == "S")
+                {
                     // changer la valeur de la variable de retour à true
-
+                    estfini = true;
+                }
                 // si le contenu de la carte à la position de destination est différente de # (un mur)
-
+                else if (this.carte[var] != "#")
+                {
                     // remplacer le joueur (la lettre J) de sa position dans la carte par un vide: " "
+                    this.carte[compteur] = "";
 
                     // placer le joueur (le symbole J) dans la carte, à la destination
+                    this.carte[var] = "J";
+                    compteur = var;
+                }
 
+            }
             // retourner la variable de retour, qui détermine si on a atteint la sortie ou non
+            return estfini;
 
         }
     }

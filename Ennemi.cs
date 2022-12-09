@@ -12,14 +12,13 @@
 // Par : Frédérik Taleb
 // Modification : 2022/11/24
 // Par : Frédérik Taleb
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LaboFinal_A22
+namespace ConsoleApp_LabA22
 {
     public class Ennemi
     {
@@ -32,25 +31,25 @@ namespace LaboFinal_A22
         public int def;
         public int mdef;
         public int hp;
-        bool magique = false;
+
 
         // magique un attribut qui détermine si les attaques sont magiques ou non
+        public bool magique = false;
 
         // Constructeur
-        public Ennemi(int att, int matt, int def, int mdef, int hp, string nom, bool magique)
+        //
+        // reçoit tous les attributs en paramètre
+        // assigne les paramètres aux attributs correspondants
+        public Ennemi(string nom, int att, int matt, int def, int mdef, int hp, bool magique)
         {
-            //
-            // reçoit tous les attributs en paramètre
-            // assigne les paramètres aux attributs correspondants
-            this.nom = nom;
             this.att = att;
             this.matt = matt;
             this.def = def;
             this.mdef = mdef;
             this.hp = hp;
             this.magique = magique;
-
         }
+
         // estMagique
         public bool estMagique()
         {
@@ -79,7 +78,7 @@ namespace LaboFinal_A22
         //
         // @param bool magique vrai pour une attaque magique, faux sinon
         // @param int dmg      le nombre de point de dommage avant la réduction par la défense
-        public void defendre(bool magique,int dmg)
+        public void defendre(bool magique, int dmg)
         {
             // si l'attaque est magique
             if (magique == true)
@@ -87,16 +86,15 @@ namespace LaboFinal_A22
                 // les dommages finaux sont le dommage - la défense magique
                 dmg -= this.mdef;
             }
+            // sinon
             else
             {
-                // sinon
-
                 // les dommages finaux sont le dommage - la défense
-                dmg  -= - this.def;
-
-                // diminuer les points de vie du nombre de points de dommage final
-                this.hp -= dmg;
+                dmg -= this.def;
             }
+            // diminuer les points de vie du nombre de points de dommage final
+            this.hp -= dmg;
+
         }
 
         // estVivant
@@ -107,15 +105,19 @@ namespace LaboFinal_A22
             // détermine s'il reste des points de vie
             // 
             // @return bool vrai s'il reste des points de vie, faux sinon
-            if (this.hp <= 0)
+            if (this.hp > 0)
+            {
+                return estVivant;
+            }
+            else
             {
                 return false;
             }
-           return estVivant;
-        }
-    
 
-            // enumererStats
+        }
+
+
+        // enumererStats
         public string enumererStats()
         {
             // 
