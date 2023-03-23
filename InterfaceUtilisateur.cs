@@ -17,13 +17,16 @@
 // Par : Frédérik Taleb
 // Modification : 2022/11/24
 // Par : Frédérik Taleb
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp_LabA22
+namespace LaboFinal_A22
 {
     public class InterfaceUtilisateur
     {
@@ -37,7 +40,7 @@ namespace ConsoleApp_LabA22
         public int largeur;
         public int hauteur;
         public string[] arene;
-
+        
         // Constructeur
         // Initialise les attributs
         public InterfaceUtilisateur()
@@ -62,7 +65,27 @@ namespace ConsoleApp_LabA22
             };
 
             // utiliser la méthode chargerCarte pour initialiser la carte et ses dimensions
-            chargerCarte();
+        }
+
+        public void menuprincipal() 
+        {
+            int choix = 0;
+            Console.WriteLine(this.entete);
+            Console.WriteLine(this.intro);
+            Console.WriteLine(this.menuIntro);
+            int.TryParse(Console.ReadLine(), out choix);
+            if(choix == 1)
+            {
+                chargerCarte();
+            else if (choix == 2)
+            {
+                Environment.Exit(0);
+            }
+            else
+            {
+                Console.WriteLine("Choix invalide");
+                menuprincipal();
+            }
         }
 
         // chargerCarte
@@ -72,57 +95,62 @@ namespace ConsoleApp_LabA22
         // quand on a fini de lire tout le fichier on initialise l'attribut hauteur
         public void chargerCarte()
         {
-            // initialiser la liste des cases de la carte
+            //Initialiser la liste carte
             this.carte = new List<string>();
 
             // initialiser un lecteur de fichier texte pour lire le fichier carte.txt
             StreamReader lecteur = new StreamReader("carte.txt");
 
             // lire la première ligne de la carte. NE PAS METTRE CETTE LIGNE DANS LA LISTE
-            string maps = lecteur.ReadLine();
+            string ligne1 = lecteur.ReadLine();
+
             // initialiser la largeur de la carte en prenant la longueur de la première ligne
+            largeur = ligne1.Length;
             // les string sont des tableau, on a accès à la propriété .Lenght
-            this.largeur = maps.Length;
+            
             // au moyen d'une boucle while remplir la liste de la carte avec chacun des symboles du fichier texte
             while (!lecteur.EndOfStream)
             {
-                // lire une ligne et la placer dans une variable temporairement
-                string test;
-                test = lecteur.ReadLine();
+                // lire une ligne et la placer dans un tableau de caractères
                 // pour chaque lettre de la ligne
-                for (int i = 0; i < largeur; i++)
+                string ligne = lecteur.ReadLine();
+                string symbole = "";
+                for (int i = 0; i < ligne.Length; i++)
                 {
-                    // ajouter le caractère au tableau
-                    string hub = char.ToString(test[i]);
-                    this.carte.Add(hub);
+                    symbole = ligne[i].ToString();
+                    carte.Add(symbole);
                 }
-
+                    // ajouter le caractère au tableau
             }
             // fermer le lecteur pour libérer le fichier 
             lecteur.Close();
             // Une fois le tableau de la carte rempli, initialiser la hauteur de la carte
             // la hauteur est le nombre d'éléments de la liste / la largeur de la carte
-            this.hauteur = carte.Count / largeur;
-
+            hauteur = 23;
             // placer le joueur à la position de départ, la première case libre en haut à gauche
-            carte[largeur + 1] = "P";
+            for(int i = 0; i < carte.Count;)
+            {
+                if (carte[i] == " ")
+                {
+                    carte[i] = "J";
+                    break;
+                }
+            }
+        }
         }
 
 
-        // afficherMenuCreation
-        public int afficherMenuCreation()
+    // afficherMenuCreation
+    //
+    // affiche le menu de création du joueur 
+    // retourne le choix de la classe : 0  pour guerrier, 1 pour magicien ou 2 pour roublard
+    //
+    // @return int le nombre correspondant à la classe choisie
+        public int afficherMenuCreation(int choixclasse = 0)
         {
-            //
-            // affiche le menu de création du joueur 
-            int choixuser = 0;
-            Console.WriteLine(menuCreation);
-            int.TryParse(Console.ReadLine(), out choixuser);
-
-            // retourne le choix de la classe : 0  pour guerrier, 1 pour magicien ou 2 pour roublard
-            choixuser--;
-            //
-            // @return int le nombre correspondant à la classe choisie
-            return choixuser;
+            Console.WriteLine(this.menuCreation);
+            int.TryParse(Console.ReadLine(), out choixclasse);
+            return choixclasse;
         }
 
         // demanderNom
@@ -130,24 +158,13 @@ namespace ConsoleApp_LabA22
         // demande le nom du personnage à la console et retourne la réponse
         // 
         // @return string le nom choisi pour le personnage
-        public string demanderNom()
+        public string demanderNom(string nom = "")
         {
-
-            Console.WriteLine("Veuillez entrer le nom de votre personnage");
-            string nom = Console.ReadLine();
-            if (nom == "")
-            {
-                nom = "Newuser";
-                return nom;
-            }
-            else
-            {
-                return nom;
-            }
-
+            Console.WriteLine("Quel est votre nom?");
+            nom = Console.ReadLine();
+            return nom;
         }
-
-
+        
         // afficherCarte
         //
         // Affiche la carte à la console 
@@ -156,15 +173,17 @@ namespace ConsoleApp_LabA22
             // pour chaque unité de hauteur de la carte
             for (int i = 0; i < hauteur; i++)
             {
-                // pour chaque unité de largeur de la carte
-                for (int j = 0; j < largeur; j++)
                 {
-                    // afficher sur la même ligne de console
-                    // le symbole de la liste à la position : j + (i * largeur)
-                    Console.Write(carte[j + (i * largeur)]);
+                    // pour chaque unité de largeur de la carte
+                    for (int j = 0; j < largeur; j++)
+                    {
+                        // afficher sur la même ligne de console
+                        // le symbole de la liste à la position : j + (i * largeur)
+                        Console.Write(carte[j + (i * largeur)]);
+                    }
+                    // sauter une ligne
+                    Console.WriteLine();
                 }
-                // sauter une ligne
-                Console.WriteLine();
             }
         }
 
@@ -183,28 +202,23 @@ namespace ConsoleApp_LabA22
             // afficher les instructions
             Console.WriteLine(this.instructions);
             // récupérer la réponse de l'utilisateur
-            string reponse = Console.ReadLine();
+            string choix = Console.ReadLine();
             // selon la réponse W (haut),S(bas),A(gauche) ou D(droite)
+            switch (choix)
+            {
+                case "W":
+                    return 0;
+                case "S":
+                    return 1;
+                case "A":
+                    return 2;
+                case "D":
+                    return 3;
+                default:
+                    return 4;
+            }
             // assigner 0,1,2 ou 3 à une variable pour le résultat
-            int assign = -1;
-            if (reponse == "W" || reponse == "w")
-            {
-                assign = 0;
-            }
-            else if (reponse == "S" || reponse == "s")
-            {
-                assign = 1;
-            }
-            else if (reponse == "A" || reponse == "a")
-            {
-                assign = 2;
-            }
-            else if (reponse == "D" || reponse == "d")
-            {
-                assign = 3;
-            }
             // retourner la variable contentant le résultat du choix
-            return assign;
         }
 
         // afficherArene
@@ -223,6 +237,7 @@ namespace ConsoleApp_LabA22
         public void afficherArene(string[] ennemis)
         {
             // variable pour savoir quel ennemi on affiche, le premier est 0
+            int ennemi = 0;
             // pour chaque case du tableau this.arene (chaque ligne d'affichage)
             for (int i = 0; i < this.arene.Length; i++)
             {
@@ -233,35 +248,38 @@ namespace ConsoleApp_LabA22
                 if (i == 2)
                 {
                     // remplacer le marqueur {0} par le nom du premier ennemi
-                    Console.WriteLine(ligne, ennemis[0]);
-
+                    ligne = ligne.Replace("{0}", ennemis[ennemi]);
                 }
-
                 // sinon si on est à la 5 ème ligne 
-                else if (i == 5)
+                else if (i == 4)
                 {
                     // remplacer le marqueur {0} par le nom du deuxième ennemi
-                    Console.WriteLine(ligne, ennemis[1]);
+                    ligne = ligne.Replace("{0}", ennemis[ennemi + 1]);
                 }
-                // sinon si on est à la 7 ème ligne
-                else if (i == 7)
+                // sinon si on est à la 7ème ligne
+                else if (i == 6)
                 {
                     // remplacer le marqueur {0} par le nom du troisième ennemi
-                    Console.WriteLine(ligne, ennemis[2]);
+                    ligne = ligne.Replace("{0}", ennemis[ennemi + 2]);
                 }
                 // sinon
                 else
                 {
                     // pour chaque case du string dans this.arene à la position actuelle (i)
-                    for (int j = 0; j < ligne.Length; j++)
+                    for (int j = 0; j < this.arene[i].Length; j++)
                     {
-                        // afficher le symbole actuel : this.arene[i][j] , sans sauter de ligne
-                        Console.WriteLine(j + " " + ligne[j]);
+                        // si on est à la position 10
+                        if (j == 10)
+                        {
+                            // afficher le symbole actuel : this.arene[i][j] , sans sauter de ligne
+                            Console.Write(this.arene[i][j]);
+                            // sauter une ligne
+                            Console.WriteLine();
+                        }
                     }
-                    // sauter une ligne
-                    Console.WriteLine();
                 }
             }
+
         }
 
         // afficherStats
@@ -278,7 +296,6 @@ namespace ConsoleApp_LabA22
                 Console.WriteLine(stats[i]);
             }
         }
-
 
         // afficherEntete
         //
@@ -300,19 +317,18 @@ namespace ConsoleApp_LabA22
         public int afficherMenuCombat(string[] actions)
         {
             // initialiser une variable pour le choix de l'action avec l'action 0
-            int ennemis = 0;
+            int action = 0;
             // pour tous les éléments du tableau des actions
             for (int i = 0; i < actions.Length; i++)
             {
                 // afficher i + 1 suivi du nom de l'action
-                i = i + 1;
-                Console.WriteLine($"{actions[i]}");
+                Console.WriteLine(i + 1 + " " + actions[i]);
             }
-
             // lire la réponse de l'utilisateur
-            int.TryParse(Console.ReadLine(), out ennemis);
+            string choix = Console.ReadLine();
             // retourne la position de l'action dans le tableau reçu en paramètre
-            return ennemis;
+            return action;
+
         }
 
         // afficherMenuCible
@@ -327,8 +343,8 @@ namespace ConsoleApp_LabA22
         {
             int choix = 0;
             for (int i = 0; i < ennemis.Length; i++)
-            {
-                Console.WriteLine((i + 1) + ". " + ennemis[i]);
+            { 
+                Console.WriteLine((i+1) + ". " + ennemis[i]);
             }
             int.TryParse(Console.ReadLine(), out choix);
 
@@ -338,28 +354,26 @@ namespace ConsoleApp_LabA22
         // afficherMenuIntro
         //
         // affiche l'intro et le menu du début, ensuite retourne le choix de l'utilisateur : 1 pour jouer, 2 pour quitter
-        public int afficherMenuIntro()
+        public void afficherMenuIntro()
         {
-            int choixIntro = 0;
-            Console.WriteLine(intro);
-            Console.WriteLine(menuIntro);
-            int.TryParse(Console.ReadLine(), out choixIntro);
-
-            return choixIntro;
+            {
+                // afficher l'intro du jeu
+                this.afficherIntro();
+                // afficher le menu du début
+                this.afficherMenuDebut();
+            }
         }
 
 
         // afficherMenuFin
         //
         // affiche le menu de fin et retourne le choix de l'utilisateur : 1 pour rejouer, 2 pour quitter
-        public int afficherMenuFin()
+        static int afficherMenuFin(int choix = 0)
         {
-            int choixFin = 0;
-            Console.WriteLine("Merci d'avoir Participé :)");
+            // afficher le menu de fin
             this.afficherMenuFin();
-            int.TryParse(Console.ReadLine(), out choixFin);
-
-            switch (choixFin)
+            int.TryParse(Console.ReadLine(), out choix);
+            switch (choix)
             {
                 case 1:
                     return 1;
@@ -368,20 +382,22 @@ namespace ConsoleApp_LabA22
                 default:
                     return 0;
             }
+            
         }
 
 
         // demanderPositionJoueur
         // 
-        // renvoie le # de la case dans this.carte où il y a un J 
+        // renvoie le # de la case dans this.carte où il y a un J
         // les x commencent à 0 et sont positifs vers la droite
         // les y commencent à 0 et sont positifs vers le bas
         //
         // @return int le numéro de la case où le joueur est
-        public int demanderPositionJoueur()
+        public int demanderPosition()
         {
             // initialiser une variable pour la position du joueur dans la liste this.carte
             string positionJoueur = "#";
+
             // tant que le compteur position est plus petit que la longueur de la liste
             // et que le contenu de la carte à la position du compteur est différente de J
             for (int i = 0; i < this.carte.Count && this.carte[i] != "J"; i++)
@@ -389,8 +405,6 @@ namespace ConsoleApp_LabA22
                 // renvoyer la position dujoueur
                 return i;
             }
-
-
         }
 
         // deplacerJoueur
@@ -405,67 +419,58 @@ namespace ConsoleApp_LabA22
         public bool deplacerJoueur(int direction)
         {
             // initialiser une variable pour dire si le joueur est arrivé à la sortie
-            bool estfini = false;
+            bool sortie = false;
             // initialiser une variable (compteur) pour le numéro de la case où le joueur est placé
-            int compteur = 0;
+            int i = 0;
             // initialiser une variable pour le numéro de la case de destination
-            int var = 0;
+            int destination;
             // trouver la case dans laquelle le joueur est avec la méthode demanderPosition()
-           compteur = demanderPositionJoueur();
+            i = demanderPosition();
             // selon la direction
             // si le joueur va vers le haut
-            if (direction == 0)
+            if(direction == 0) 
             {
                 // la case de destination est la case du joueur - la largeur de la carte
-                var = compteur - this.largeur;
+                destination = i - this.largeur;
             }
-
-            // vers le bas
             else if (direction == 1)
             {
                 // la case de destination est la case du joueur + la largeur de la carte
-                var = compteur + this.largeur;
+                destination = i + this.largeur;
             }
-
-            // vers la gauche
             else if (direction == 2)
             {
                 // la case de destination est la case du joueur - 1
-                var = compteur - 1;
+                destination = i - 1;
             }
-
-            // vers la droite
             else if (direction == 3)
             {
                 // la case de destination est la case du joueur + 1
-                var = compteur + 1;
+                destination = i + 1;
             }
-
+            
             // si la position de destination est dans la carte
             // >= 0 et < le nombre d'éléments de la carte
-            if (var >= 0 && var < this.carte.Count)
+            if(destination >= 0 || destination < this.carte.Count)
             {
                 // si le contenu de la carte à la position de destination est la sortie (un S)
-                if (this.carte[var] == "S")
+                if (this.carte[destination] == "S")
                 {
                     // changer la valeur de la variable de retour à true
-                    estfini = true;
+                    sortie = true;
                 }
                 // si le contenu de la carte à la position de destination est différente de # (un mur)
-                else if (this.carte[var] != "#")
+                else if (this.carte[destination] != "#")
                 {
                     // remplacer le joueur (la lettre J) de sa position dans la carte par un vide: " "
-                    this.carte[compteur] = "";
-
+                    this.carte[i] = "";
                     // placer le joueur (le symbole J) dans la carte, à la destination
-                    this.carte[var] = "J";
-                    compteur = var;
-                }
-
+                    this.carte[destination] = "J";
+                    i = destination;
+                }    
+                    
             }
-            // retourner la variable de retour, qui détermine si on a atteint la sortie ou non
-            return estfini;
-
+            return sortie;
         }
     }
 }
